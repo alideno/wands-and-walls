@@ -1,0 +1,86 @@
+[gd_scene load_steps=9 format=3 uid="uid://dxkkdhu3bnmgv"]
+
+[ext_resource type="PackedScene" uid="uid://mmvma0igvw5d" path="res://doohickey objects/redpathoneopen.glb" id="2_6yt8k"]
+[ext_resource type="Script" path="res://scripts/CameraMovement.gd" id="3_7h3ng"]
+[ext_resource type="PackedScene" uid="uid://boc110lvb7w5o" path="res://doohickey objects/redpathbothopen.glb" id="3_wg61m"]
+[ext_resource type="Script" path="res://test_button.gd" id="4_6gn1m"]
+[ext_resource type="Script" path="res://scripts/Enemy.gd" id="5_re11p"]
+[ext_resource type="Script" path="res://attack_button.gd" id="6_qr7xh"]
+
+[sub_resource type="Environment" id="Environment_8g4kj"]
+background_mode = 1
+
+[sub_resource type="BoxMesh" id="BoxMesh_ms5u4"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="default3" parent="." instance=ExtResource("2_6yt8k")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 20)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 20.6233, 0)
+light_color = Color(0, 0, 0, 1)
+shadow_enabled = true
+shadow_bias = 0.0
+shadow_normal_bias = 10.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_8g4kj")
+
+[node name="default2" parent="." instance=ExtResource("2_6yt8k")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -40)
+
+[node name="default4" parent="." instance=ExtResource("3_wg61m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="default5" parent="." instance=ExtResource("3_wg61m")]
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 24)
+script = ExtResource("3_7h3ng")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.97236)
+light_color = Color(1, 0.823529, 0.109804, 1)
+light_energy = 3.0
+light_indirect_energy = 0.0
+omni_range = 31.748
+
+[node name="Button" type="Button" parent="."]
+offset_left = 237.0
+offset_top = 689.0
+offset_right = 440.0
+offset_bottom = 838.0
+theme_override_font_sizes/font_size = 40
+text = "TEST"
+script = ExtResource("4_6gn1m")
+
+[node name="Enemy" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -19)
+script = ExtResource("5_re11p")
+
+[node name="Enemy" type="MeshInstance3D" parent="Enemy"]
+transform = Transform3D(4.50442, 0, 0, 0, 5.58963, 0, 0, 0, 2.0334, 0, 0, 0)
+mesh = SubResource("BoxMesh_ms5u4")
+skeleton = NodePath("../..")
+
+[node name="Button2" type="Button" parent="."]
+offset_left = 1289.0
+offset_top = 711.0
+offset_right = 1782.0
+offset_bottom = 850.0
+theme_override_font_sizes/font_size = 40
+text = "ATTACK"
+script = ExtResource("6_qr7xh")
+
+[connection signal="pressed" from="Button" to="SubViewportContainer/SubViewport/Camera3D" method="_on_button_pressed"]
+[connection signal="pressed" from="Button2" to="Button2" method="_on_pressed"]
